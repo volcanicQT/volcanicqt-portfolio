@@ -83,7 +83,7 @@ export const DATA = {
   // Contact / call to action
   cta: {
     kicker: 'Full-time UGC creator · Available for campaigns',
-    title: "Got a launch? I'll make players <span class=\"hl\">care.</span>",
+    title: "Got a launch? I'll make everyone <span class=\"hl\">care.</span>",
     body: 'I help games and brands turn attention into community, growth and revenue through content. Reviews, launch videos, X threads, streams and campaign UGC: scripted, shot, edited and posted by someone who actually plays.',
     audiences: ['Game studios', 'Web3 & on-chain games', 'Exchanges & trading apps', 'Fintech & finance brands', 'Creator campaigns'],
   },
@@ -100,7 +100,6 @@ export const DATA = {
     { name: 'Loadout', logo: 'assets/logos/loadout.png', url: 'https://x.com/loadoutprotocol' },
     { name: 'Glip', logo: 'assets/logos/glip.png', url: 'https://glip.gg' },
     { name: 'Vibecode.game', logo: 'assets/logos/vibecode.jpg', url: 'https://x.com/Vibecode_game' },
-    { name: 'Crypto of Thrones', logo: 'assets/logos/cot.jpg', url: 'https://x.com/cot__gg' },
     { name: 'BlackVeil Society', logo: 'assets/logos/blackveil.jpg', url: 'https://x.com/BlackVeil_ST' },
   ],
   // Fuzzy 3D blobs in the background that open a link when clicked

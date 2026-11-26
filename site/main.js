@@ -88,7 +88,7 @@ function frame(now) {
       if (shot && document.getElementById(shot)) {
         const el = document.getElementById(shot);
         const y = el.offsetTop + Math.max(0, (el.offsetHeight - innerHeight) / 2);
-        lenis ? lenis.scrollTo(y, { immediate: true }) : scrollTo(0, y);
+        lenis ? lenis.scrollTo(y, { immediate: true }) : window.scrollTo(0, y);
       }
     }
   }
