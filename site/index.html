@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Santanu Saha · VolcanicQT</title>
+  <meta name="description" content="Santanu Saha (VolcanicQT): gaming and Web3 content creator, ambassador, social media manager and game QA lead." />
+  <link rel="icon" href="assets/avatar.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Manrope:wght@400;500;700&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+</head>
+<body class="loading">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <filter id="lg-refract" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.011 0.022" numOctaves="2" seed="7" result="n" />
+      <feGaussianBlur in="n" stdDeviation="2" result="nb" />
+      <feDisplacementMap in="SourceGraphic" in2="nb" scale="22" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
+  <div class="loader" id="loader">
+    <div class="loader__num"><span id="loaderNum">0</span><small>%</small></div>
+    <div class="loader__bar"><i id="loaderBar"></i></div>
+    <p class="loader__hint">Building the scene</p>
+  </div>
+
+  <div class="bg" aria-hidden="true">
+    <div class="blob b1" id="blob1"></div>
+    <div class="blob b2" id="blob2"></div>
+    <div class="grain"></div>
+  </div>
+  <canvas id="webgl" aria-hidden="true"></canvas>
+
+  <header class="nav">
+    <a href="#home" class="nav__logo" data-nav id="navLogo">YN</a>
+    <nav class="nav__links">
+      <a href="#about" data-nav>About</a>
+      <a href="#achievements" data-nav>Achievements</a>
+      <a href="#programs" data-nav>Programs</a>
+      <a href="#experience" data-nav>Experience</a>
+      <a href="#work" data-nav>Showcase</a>
+    </nav>
+    <div class="nav__right">
+      <button class="music" id="musicBtn" type="button" aria-pressed="false" aria-label="Background music" title="Play music"><i></i><i></i><i></i><i></i></button>
+      <a href="#contact" class="btn btn--sm" data-nav>Let's talk</a>
+    </div>
+  </header>
+
+  <main id="content">
+    <section class="sec hero" id="home" data-name="Home"></section>
+    <div class="trusted" id="trusted"></div>
+    <section class="sec right" id="about" data-name="About"></section>
+    <section class="sec" id="achievements" data-name="Achievements"></section>
+    <section class="sec right" id="programs" data-name="Programs"></section>
+    <section class="sec" id="experience" data-name="Experience"></section>
+    <section class="sec showcase" id="work" data-name="Showcase"></section>
+    <div class="process" id="process"></div>
+    <section class="sec contact" id="contact" data-name="Contact"></section>
+  </main>
+
+  <div class="hud" aria-hidden="true">
+    <span id="hudIdx">01</span><span class="hud__sep">/</span><span>07</span>
+    <span class="hud__bar"><i id="hudBar"></i></span>
+    <span id="hudName">Home</span>
+  </div>
+  <div class="cursor" id="cursor"></div>
+  <div class="tip" id="tip"></div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

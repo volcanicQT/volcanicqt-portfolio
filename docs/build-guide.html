@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VolcanicQT Portfolio · Build Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Manrope:wght@400;600;700&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 16mm 15mm 18mm; }
+  :root { --ink:#15131f; --ink2:#4b4868; --lav:#ecebfb; --purple:#6c5cf5; --deep:#4a3bdc; --lime:#c8f23a; --line:#dcd8f5; }
+  * { box-sizing: border-box; }
+  body { font-family: Manrope, sans-serif; color: var(--ink); font-size: 10.2pt; line-height: 1.55; margin: 0; }
+  h1, h2, h3 { font-family: Unbounded, sans-serif; letter-spacing: -0.03em; line-height: 1.1; }
+  h1 { font-size: 30pt; margin: 0 0 8pt; }
+  h2 { font-size: 16pt; margin: 22pt 0 8pt; padding-top: 6pt; border-top: 2px solid var(--purple); page-break-after: avoid; }
+  h3 { font-size: 11.5pt; margin: 14pt 0 5pt; page-break-after: avoid; }
+  p { margin: 0 0 7pt; }
+  .hl { color: var(--purple); }
+  code, pre, .mono { font-family: "JetBrains Mono", monospace; font-size: 8.4pt; }
+  code { background: var(--lav); padding: 0 3pt; border-radius: 3pt; }
+  pre { background: #17151f; color: #e9e6ff; padding: 9pt 11pt; border-radius: 8pt; white-space: pre-wrap; word-break: break-word; page-break-inside: avoid; margin: 6pt 0 10pt; }
+  pre .c { color: #9d93d9; } pre .k { color: var(--lime); }
+  table { width: 100%; border-collapse: collapse; margin: 6pt 0 12pt; font-size: 9pt; page-break-inside: auto; }
+  th { text-align: left; background: var(--lav); font-weight: 700; }
+  th, td { padding: 4.5pt 6pt; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tr { page-break-inside: avoid; }
+  .cover { height: 255mm; display: flex; flex-direction: column; justify-content: space-between; page-break-after: always;
+    background: radial-gradient(circle at 85% 12%, #7363f6 0, rgba(115,99,246,.35) 30%, rgba(236,235,251,0) 60%), var(--lav); border-radius: 18pt; padding: 26pt; }
+  .kicker { font-family: "JetBrains Mono", monospace; font-size: 8pt; letter-spacing: .14em; text-transform: uppercase; color: var(--ink2); }
+  .badge { display: inline-block; background: var(--lime); color: var(--ink); font-weight: 700; font-size: 8pt; padding: 2pt 8pt; border-radius: 99pt; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
+  figure { margin: 6pt 0 12pt; page-break-inside: avoid; }
+  figure img { width: 100%; border-radius: 9pt; border: 1px solid var(--line); display: block; }
+  figcaption { font-size: 8pt; color: var(--ink2); margin-top: 3pt; }
+  .sw { display: inline-block; width: 14pt; height: 14pt; border-radius: 4pt; vertical-align: middle; border: 1px solid rgba(0,0,0,.08); margin-right: 5pt; }
+  .toc { columns: 2; font-size: 9.5pt; } .toc div { margin-bottom: 3pt; }
+  .note { background: #f6f5ff; border-left: 3pt solid var(--purple); padding: 6pt 10pt; border-radius: 4pt; margin: 6pt 0 10pt; font-size: 9pt; }
+  .pb { page-break-before: always; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div>
+    <p class="kicker">VolcanicQT · Santanu Saha · Build guide</p>
+    <h1>3D Portfolio<br><span class="hl">Website</span>, <br>how it's built.</h1>
+    <p style="max-width:120mm">Every language, library, 3D object, animation, timing, colour, font size, effect and asset used to build
+      the portfolio at <b>volcanicqt.vercel.app</b>, plus how to edit, run and redeploy it.</p>
+  </div>
+  <figure style="margin:0"><img src="shots/01-hero-studio.png" alt=""><figcaption>The hero: a real-time 3D clay "creator studio" rendered with Three.js.</figcaption></figure>
+  <div class="grid2 mono" style="font-size:8pt">
+    <div><b>Live</b><br>https://volcanicqt.vercel.app</div>
+    <div><b>Code</b><br>github.com · volcanicqt-portfolio</div>
+    <div><b>Built</b><br>27 November 2026</div>
+    <div><b>Stack</b><br>HTML · CSS · JavaScript (ES modules) · WebGL / Three.js</div>
+  </div>
+</section>
+
+<h2>Contents</h2>
+<div class="toc">
+  <div>1. Overview</div><div>2. Languages & libraries</div><div>3. Project structure</div><div>4. Design system: colours, type, spacing</div>
+  <div>5. Page sections</div><div>6. The 3D scene</div><div>7. Animation & motion (all timings)</div><div>8. Visual effects</div>
+  <div>9. Media: video, music, images</div><div>10. Interactions</div><div>11. Editing content (data.js)</div><div>12. Run, deploy, credits</div>
+</div>
+
+<h2>1. Overview</h2>
+<p>A single-page portfolio for <b>Santanu Saha (VolcanicQT)</b>, a full-time UGC and gaming content creator, Web3 creator-program member,
+social media manager and lead game tester. The page is a fixed, full-screen <b>WebGL canvas</b> (Three.js) behind normal HTML sections.
+As you scroll, the 3D objects glide between a hand-designed layout for each section. There is no build step: plain files served as a static site.</p>
+<p><b>Design references:</b> Vedant Hegde's Dribbble shot "3D Illustration – Stock Portfolio" (glossy periwinkle and lime plastic, cube of logo tiles,
+black handheld, pixel-art icons); Luis Bizarro's Awwwards site bizar.ro (real-time 3D, one object per project); a green clay "product designer" layout
+(fuzzy blobs, logo strip, 3-step process cards, layered paper-cut CTA); and a 3D clay character-in-armchair illustration (for the creator studio).</p>
+<div class="grid2">
+  <figure><img src="shots/ref-dribbble.jpg" alt=""><figcaption>Visual reference: glossy 3D illustration style.</figcaption></figure>
+  <figure><img src="shots/ref-vibeblitz.jpg" alt=""><figcaption>The VibeBlitz winners graphic, whose purple + lime palette matches the site.</figcaption></figure>
+</div>
+
+<h2>2. Languages & libraries</h2>
+<table>
+  <tr><th>Language / tech</th><th>Where</th><th>Used for</th></tr>
+  <tr><td>HTML5</td><td><code>index.html</code></td><td>Page shell, sections, nav, loader, SVG refraction filter, import map</td></tr>
+  <tr><td>CSS3</td><td><code>style.css</code></td><td>Layout (flex/grid), design tokens, glass effects, keyframe animations, responsive rules</td></tr>
+  <tr><td>JavaScript (ES2022 modules)</td><td><code>main.js</code>, <code>ui.js</code>, <code>scene.js</code>, <code>data.js</code></td><td>Boot/loader, scroll mapping, DOM building, video/music logic, the whole 3D scene</td></tr>
+  <tr><td>WebGL (via Three.js)</td><td><code>scene.js</code></td><td>Real-time 3D rendering, PBR materials, shadows, environment lighting</td></tr>
+  <tr><td>Canvas 2D</td><td><code>scene.js</code></td><td>Live device/monitor screen, text labels on cube tiles, link pills, felt and speckle textures</td></tr>
+  <tr><td>SVG</td><td><code>index.html</code>, <code>ui.js</code></td><td>Liquid-glass refraction filter, icons, process curve, paper-cut CTA layers</td></tr>
+  <tr><td>Node.js</td><td><code>serve.mjs</code></td><td>21-line local static server for previewing</td></tr>
+  <tr><td>JSON</td><td><code>.vercel/project.json</code></td><td>Vercel project link (kept out of the repo)</td></tr>
+  <tr><td>Shell / ffmpeg / yt-dlp</td><td>tooling</td><td>Downloading and encoding videos and thumbnails</td></tr>
+  <tr><td>earshot (Python)</td><td>tooling</td><td>Rendering the background music loop</td></tr>
+</table>
+<table>
+  <tr><th>Library</th><th>Version</th><th>Loaded from</th><th>Licence</th></tr>
+  <tr><td>three.js (+ RoundedBoxGeometry, RoomEnvironment, BufferGeometryUtils)</td><td>0.169.0</td><td>cdn.jsdelivr.net (import map)</td><td>MIT</td></tr>
+  <tr><td>Lenis (smooth scroll)</td><td>1.1.13</td><td>unpkg.com</td><td>MIT</td></tr>
+  <tr><td>Google Fonts: Unbounded, Manrope, JetBrains Mono</td><td>—</td><td>fonts.googleapis.com</td><td>SIL OFL</td></tr>
+</table>
+
+<h2>3. Project structure</h2>
+<pre>site/
+├─ index.html      <span class="c">81 lines · shell, nav, sections, SVG filter, import map</span>
+├─ style.css       <span class="c">~550 lines · tokens, layout, effects, animations, responsive</span>
+├─ main.js         <span class="c">~100 lines · fonts → scene → loader → Lenis → scroll progress → frame loop</span>
+├─ ui.js           <span class="c">~360 lines · builds every section from data.js, reveals, counters, video + music, cursor</span>
+├─ scene.js        <span class="c">~800 lines · the entire Three.js world</span>
+├─ data.js         <span class="c">all text, links, stats, programs, videos (edit this file)</span>
+├─ serve.mjs       <span class="c">local preview server: node serve.mjs → http://localhost:5173</span>
+└─ assets/
+   ├─ avatar.jpg, banner.jpg, me.png     <span class="c">X avatar/banner, Canva cutout (cutout no longer shown)</span>
+   ├─ logos/   immutable, ygg, loadout, glip, binance, vibecode, cot, blackveil
+   ├─ jam/     pixel-abyss.jpg, vibeblitz-web.jpg
+   ├─ work/    5 YouTube/stream thumbnails from the Canva deck
+   ├─ videos/  4 showcase videos (mp4) + poster frames
+   └─ audio/   chill.ogg + chill.m4a (background music loop)</pre>
+<p><b>Boot order:</b> <code>main.js</code> waits for the fonts (max 2.5 s), builds the DOM (<code>buildUI</code>), builds the 3D scene (<code>createScene</code>),
+animates the 0–100 % loader, then reveals the page, starts the intro animation and the text reveals. One <code>requestAnimationFrame</code> loop drives
+Lenis, the scene and the UI each frame.</p>
+
+<h2>4. Design system</h2>
+<h3>Colours</h3>
+<table>
+  <tr><th>Token</th><th>Value</th><th>Use</th></tr>
+  <tr><td><span class="sw" style="background:#15131f"></span><code>--ink</code></td><td>#15131F</td><td>Text, dark buttons, device body</td></tr>
+  <tr><td><span class="sw" style="background:#4b4868"></span><code>--ink2</code></td><td>#4B4868</td><td>Secondary text</td></tr>
+  <tr><td><span class="sw" style="background:#ecebfb"></span><code>--lav</code></td><td>#ECEBFB</td><td>Page background</td></tr>
+  <tr><td><span class="sw" style="background:#6c5cf5"></span><code>--purple</code></td><td>#6C5CF5</td><td>Accent words, chair, 3D purple plastic (#6252F2)</td></tr>
+  <tr><td><span class="sw" style="background:#4a3bdc"></span><code>--purple-d</code></td><td>#4A3BDC</td><td>Deep purple: CTA layers, gradients</td></tr>
+  <tr><td><span class="sw" style="background:#c8f23a"></span><code>--lime</code></td><td>#C8F23A</td><td>Highlights, tags, D-pad, rings, buttons</td></tr>
+  <tr><td><span class="sw" style="background:#c4befa"></span>3D lavender</td><td>#C4BEFA / #BAB1FB</td><td>Pixel icons, clay blobs</td></tr>
+  <tr><td><span class="sw" style="background:#f2f1fb"></span>3D white</td><td>#F2F1FB</td><td>Cube tiles, desk</td></tr>
+  <tr><td><span class="sw" style="background:#7363f6"></span>Background blob</td><td>radial #7363F6 → transparent</td><td>Big soft purple glow, moves with scroll</td></tr>
+</table>
+<h3>Typography</h3>
+<table>
+  <tr><th>Role</th><th>Font</th><th>Size (fluid)</th><th>Weight / spacing</th></tr>
+  <tr><td>Hero title (h1)</td><td>Unbounded</td><td><code>clamp(3.2rem, 7.6vw, 8.4rem)</code></td><td>800 · −0.05em · line-height 0.92</td></tr>
+  <tr><td>Section title (h2)</td><td>Unbounded</td><td><code>clamp(2.2rem, 4.4vw, 4.6rem)</code></td><td>700 · −0.045em</td></tr>
+  <tr><td>Contact title</td><td>Unbounded</td><td><code>clamp(2.4rem, 4.8vw, 5rem)</code></td><td>700</td></tr>
+  <tr><td>Card titles</td><td>Unbounded</td><td>0.92–1.6rem</td><td>600–800 · −0.02 to −0.04em</td></tr>
+  <tr><td>Body / lead</td><td>Manrope</td><td><code>clamp(1rem, 1.2vw, 1.15rem)</code></td><td>400 · line-height 1.65</td></tr>
+  <tr><td>Kickers, tags, HUD</td><td>JetBrains Mono</td><td>0.66–0.78rem</td><td>500–700 · +0.08 to +0.14em, uppercase</td></tr>
+  <tr><td>Loader number</td><td>Unbounded</td><td><code>clamp(4rem, 12vw, 9rem)</code></td><td>800</td></tr>
+</table>
+<h3>Spacing, radius, shadow</h3>
+<table>
+  <tr><th>Thing</th><th>Value</th></tr>
+  <tr><td>Section padding</td><td>16vh 6vw 12vh (desktop) · 12vh 20px 10vh (mobile)</td></tr>
+  <tr><td>Text column</td><td><code>min(560px, 44vw)</code>, left or right per section</td></tr>
+  <tr><td>Radii</td><td>Pills 99px · cards 18–26px · video tiles 22px · CTA panel 34px</td></tr>
+  <tr><td>Card glass</td><td>rgba(255,255,255,.55) + backdrop blur 14px + 1px white border</td></tr>
+  <tr><td>Breakpoints</td><td>1024px (narrower column) · 760px (mobile: frosted cards, single-column grids, 3D scaled ×0.62)</td></tr>
+  <tr><td>Main easing</td><td><code>cubic-bezier(.2,.85,.2,1)</code> (fast out, soft settle)</td></tr>
+</table>
+
+<h2 class="pb">5. Page sections</h2>
+<table>
+  <tr><th>#</th><th>Section</th><th>Content</th><th>What the 3D does</th></tr>
+  <tr><td>01</td><td>Hero</td><td>Name, roles, intro, 2 CTAs</td><td>Creator studio diorama in front; device, cube and icons frame the edges</td></tr>
+  <tr><td>—</td><td>Trusted strip</td><td>8 clickable brand logos</td><td>Transition</td></tr>
+  <tr><td>02</td><td>About</td><td>Bio + 3 counting stats</td><td>Handheld moves front-left (×1.45), its screen shows live stats</td></tr>
+  <tr><td>03</td><td>Achievements</td><td>Featured Pixel Abyss card + 5 wins</td><td>Cube explodes into floating tiles; hover a tile for a win</td></tr>
+  <tr><td>04</td><td>Programs</td><td>6 program cards + marquee</td><td>Pixel star, play coin, smiley and cursor come forward big</td></tr>
+  <tr><td>05</td><td>Experience</td><td>7-role timeline + skills</td><td>Handheld on the right showing a live chart</td></tr>
+  <tr><td>06</td><td>Showcase</td><td>4 autoplay videos + 4 thumbnails</td><td>Objects move to the screen edges</td></tr>
+  <tr><td>—</td><td>Process</td><td>3 tilted step cards</td><td>Transition</td></tr>
+  <tr><td>07</td><td>Contact</td><td>Layered UGC CTA panel, 4 contact buttons, socials</td><td>Device and cube return at the sides</td></tr>
+</table>
+<div class="grid2">
+  <figure><img src="shots/03-achievements.jpg" alt=""><figcaption>Achievements: the cube has exploded into tiles.</figcaption></figure>
+  <figure><img src="shots/05-experience.jpg" alt=""><figcaption>Experience timeline with the handheld's live chart.</figcaption></figure>
+  <figure><img src="shots/06-showcase.jpg" alt=""><figcaption>Showcase bento grid of autoplaying videos.</figcaption></figure>
+  <figure><img src="shots/07-process.jpg" alt=""><figcaption>"Here's how we work" clay step cards.</figcaption></figure>
+</div>
+<figure><img src="shots/08-contact.jpg" alt="" style="max-height:95mm;object-fit:cover"><figcaption>Contact: layered paper-cut CTA with Calendly, email, Telegram and X buttons.</figcaption></figure>
+
+<h2 class="pb">6. The 3D scene (scene.js)</h2>
+<h3>Renderer, camera, lights</h3>
+<table>
+  <tr><th>Setting</th><th>Value</th></tr>
+  <tr><td>Renderer</td><td>WebGLRenderer, antialias, alpha; pixel ratio ≤ 2 (≤ 1.5 on mobile); sRGB output</td></tr>
+  <tr><td>Tone mapping</td><td>ACES Filmic, exposure 1.05</td></tr>
+  <tr><td>Environment</td><td>RoomEnvironment through PMREM (soft studio reflections), intensity 0.9</td></tr>
+  <tr><td>Camera</td><td>Perspective, FOV 30°, at z = 24; follows the pointer (x ±0.7, y ±0.45), eased 1 − e^(−3·dt)</td></tr>
+  <tr><td>Key light</td><td>Directional white 2.3 at (7, 11, 14), soft shadows (PCFSoft, 2048² map, bias −0.0004)</td></tr>
+  <tr><td>Rim light</td><td>Directional #9D90FF 1.6 at (−10, 4, −6)</td></tr>
+  <tr><td>Fill</td><td>Hemisphere white / #7D70F0, 0.55</td></tr>
+  <tr><td>Shadow wall</td><td>240×240 plane at z = −12 with ShadowMaterial #2A1D9E, opacity 0.17</td></tr>
+  <tr><td>Ring light</td><td>PointLight #F1EDFF, intensity 6.5 ± 0.6 (pulsing), range 7</td></tr>
+</table>
+<h3>Materials</h3>
+<table>
+  <tr><th>Name</th><th>Type</th><th>Values</th></tr>
+  <tr><td>White plastic</td><td>MeshPhysical</td><td>#F2F1FB, roughness 0.3, clearcoat 0.7 (0.22 rough)</td></tr>
+  <tr><td>Speckled black</td><td>MeshPhysical + canvas speckle map</td><td>roughness 0.62, clearcoat 0.35 (3,200 random flecks on 256² canvas)</td></tr>
+  <tr><td>Lime / purple</td><td>MeshPhysical</td><td>#C8F23A / #6252F2, roughness 0.28–0.3, clearcoat 1</td></tr>
+  <tr><td>Felt clay (blobs, hoodie)</td><td>MeshPhysical + sheen + bump</td><td>roughness 0.92, sheen 1 (0.55 rough), 14k-dot felt bump map, bumpScale 1.2</td></tr>
+  <tr><td>Glow (ring light, RGB fans, screens)</td><td>MeshBasic, toneMapped off</td><td>Unlit so they read as light sources</td></tr>
+</table>
+<h3>Objects</h3>
+<table>
+  <tr><th>Object</th><th>How it's made</th></tr>
+  <tr><td>Creator studio (hero)</td><td>≈120 primitives: platform (r 5, lime rim), rug, desk, monitor showing the live screen, keyboard, mouse, plant (7 cones), gaming PC with glass panel and 3 spinning RGB fans (hue cycles), gaming chair (seat, backrest with lime stripe, headrest, armrests, 5-star base + wheels), character (capsule body and limbs, sphere head, hair cap + 5 fringe tufts, glasses, smile, headphones with lime rings, controller), ring light on a tripod, camera on a tripod with blinking REC light, 3 hexagon badges with Immutable / YGG Play / Loadout logos. Whole diorama turned −0.5 rad for a 3/4 view.</td></tr>
+  <tr><td>Logo cube</td><td>26 RoundedBox cubies (0.94, radius 0.13) in a 3×3×3 with one popped out; canvas-text decals ("IMX", "#5", "YGG", "28K", "UGC"…) on 45–75 % of outer faces (seeded random)</td></tr>
+  <tr><td>Floating cubie</td><td>Lime "#5" top face, "GG" front, ★ side; spins on two axes</td></tr>
+  <tr><td>Handheld device</td><td>Speckled body 3.4×3.7×0.75, bezel, 512×358 canvas screen, lime D-pad, white + purple buttons, side keys, chrome USB plug</td></tr>
+  <tr><td>Pixel icons</td><td>Extruded pixel art: each pixel a box (0.2 units), merged per material: scalloped smiley badge, star coin, play coin, cursor arrow; edges purple, fill lavender, symbol deep ink</td></tr>
+  <tr><td>Clay blobs</td><td>Icosahedron (detail 22) displaced by 4 sine waves per vertex; 5 shared shapes, 4 colours; 6 around the studio, 8 in the background</td></tr>
+  <tr><td>Link blobs</td><td>5 background blobs with a dark "↗ label" sprite: Telegram, X, YouTube, Book a call, Kick; click opens the link</td></tr>
+  <tr><td>Cable</td><td>TubeGeometry along a 4-point Catmull-Rom curve from the device plug to the cube, rebuilt each frame (used in the contact layout)</td></tr>
+</table>
+<h3>Live screen (canvas, redrawn every frame)</h3>
+<p>Three modes blended by a weight (0 = chart, 1 = stats, 2 = profile): an animated line chart (sum of 3 sine waves + a sharp spike, white 7px line with glow on a 32px grid),
+a cycling stat (changes every 2.6 s, auto-shrinks to fit), and a profile card (circular avatar with lime ring, "● ONLINE", VolcanicQT, progress bar).</p>
+
+<h2>7. Animation & motion</h2>
+<h3>Scroll → 3D layout</h3>
+<p>Each of the 7 sections has an <b>anchor</b> (its top + half the extra height). The scroll position becomes a continuous progress
+<code>p</code> from 0 to 6; inside each gap the step is eased with <code>smoothstep(0.1, 0.9, t)</code>, so objects <b>hold still</b> while you read and glide between sections.
+Every object has a position, rotation and scale per section (the <code>DESK</code> table); the current target is a linear blend of the two neighbouring layouts.</p>
+<pre><span class="c">// main.js: scroll position → progress p</span>
+<span class="k">const</span> progress = (y) => {
+  for (let i = 0; i &lt; anchors.length - 1; i++)
+    if (y &lt; anchors[i + 1]) return i + smooth(0.1, 0.9, (y - anchors[i]) / (anchors[i + 1] - anchors[i]));
+  return anchors.length - 1;
+};
+<span class="c">// scene.js: every object eases toward its target (frame-rate independent)</span>
+<span class="k">const</span> damp = (a, b, k, dt) => lerp(a, b, 1 - Math.exp(-k * dt));   <span class="c">// k = 4.2 for objects</span></pre>
+<h3>Timings and numbers</h3>
+<table>
+  <tr><th>Motion</th><th>Value</th></tr>
+  <tr><td>Smooth scroll (Lenis)</td><td>lerp 0.085, wheel ×0.9; nav jumps take 1.6 s</td></tr>
+  <tr><td>Object follow</td><td>exponential damping k = 4.2 (position, rotation, scale)</td></tr>
+  <tr><td>Intro</td><td>each object pops in with easeOutBack (overshoot 1.5) over 1.1 s, staggered 0.09 s; rises 2.5 units</td></tr>
+  <tr><td>Idle float</td><td>bob ±0.16 at 0.9 rad/s; tilt ±0.05 / ±0.09 / ±0.03 rad at 0.42–0.55 rad/s</td></tr>
+  <tr><td>Rubik turns</td><td>one random layer turns 90° in 0.75 s (cubic in-out), every 1.5–2.5 s; paused while exploded</td></tr>
+  <tr><td>Cube explode</td><td>positions ×2.5 + random jitter (±0.75), each tile tumbles ±1–3 rad; damping k = 3</td></tr>
+  <tr><td>Click spin</td><td>+360° on the clicked object, damped k = 3.2; clicking the cube forces a turn</td></tr>
+  <tr><td>Hover lift</td><td>cube tile pops 0.3 out; other objects scale +6 %; link blobs +12 %</td></tr>
+  <tr><td>Scroll tilt</td><td>world tilts with scroll speed (velocity × 0.012, max ±0.35), eased k = 4</td></tr>
+  <tr><td>Background blobs</td><td>parallax speed 3.4 × depth, wrap around a 26-unit band; slow spin</td></tr>
+  <tr><td>Studio</td><td>fans spin 6–10 rad/s; RGB hue cycles every 12.5 s; head nods (2.2 Hz) and turns (±0.22); REC blinks 0.8 Hz; hex badges bob ±0.15</td></tr>
+  <tr><td>Headline reveal</td><td>each word slides up 110 % and un-rotates 4° in 1.1 s, 0.07 s per word</td></tr>
+  <tr><td>Fade-ups</td><td>28px up, 0.9–1 s, staggered 0.06 s within a section</td></tr>
+  <tr><td>Counters</td><td>count up over 1.8 s, ease-out quart</td></tr>
+  <tr><td>Marquee</td><td>program names scroll every 32 s, tilted −2°</td></tr>
+  <tr><td>Headline shadow</td><td>soft purple shadow drifts on a 6 s loop</td></tr>
+  <tr><td>Loader</td><td>0 → 100 % counter, then the screen wipes up (clip-path) in 1.1 s</td></tr>
+  <tr><td>Music button</td><td>4 equaliser bars bounce 5 → 18px on a 1 s loop</td></tr>
+</table>
+<div class="note">Reduced motion: visitors who turn off animations in their OS get no Lenis smoothing, no text reveals, no marquee and a static headline shadow.</div>
+
+<h2>8. Visual effects</h2>
+<table>
+  <tr><th>Effect</th><th>Recipe</th></tr>
+  <tr><td>Liquid-glass buttons</td><td>Same recipe as the liquid-glass skill: <code>backdrop-filter: blur(10px) saturate(1.8) brightness(1.06)</code>, a top-to-middle white sheen,
+    a tint (dark 0.72, white 0.24–0.38, lime 0.8), a bright 1px top rim, inner edge glows, a drop shadow, and a pointer-following radial highlight
+    (soft-light). Chrome/Edge add real refraction with the <code>#lg-refract</code> SVG filter (fractal noise 0.011/0.022, blur 2, displacement 22).</td></tr>
+  <tr><td>Headline outline</td><td><code>-webkit-text-stroke: 0.14em #fff</code> with <code>paint-order: stroke fill</code> (stroke behind the letters) + drifting shadow</td></tr>
+  <tr><td>Paper-cut CTA</td><td>4 SVG layers, each a rectangle with a wobbly hole (48-point closed curve with 3- and 5-lobe waves), colours #3A2BB8 → #7666F7, drop shadows; layers shift 6–26px with the mouse for parallax</td></tr>
+  <tr><td>Process curve</td><td>dashed lime SVG path (2 / 14 dash) with a glow behind three cards tilted −4°, 3°, −2°</td></tr>
+  <tr><td>Glass cursor</td><td>system cursor + a 26px glass bubble (blur 3px, white rim, highlight) following at 30 % per frame</td></tr>
+  <tr><td>Grain</td><td>SVG fractal-noise overlay at 7 % opacity, multiply</td></tr>
+  <tr><td>Background glow</td><td>two blurred radial gradients that drift with scroll progress</td></tr>
+</table>
+
+<h2>9. Media</h2>
+<table>
+  <tr><th>Asset</th><th>Source</th><th>Processing</th></tr>
+  <tr><td>4 showcase videos</td><td>Santanu's own X posts (yt-dlp)</td><td>ffmpeg H.264 CRF 28, 30 fps, 1280 wide (landscape) / 720 wide (vertical), AAC 96k, faststart; poster frame at 3 s</td></tr>
+  <tr><td>Video sound</td><td>—</td><td>Autoplay muted while ≥ 15 % visible; after the first click the most visible video plays at 12 % volume; speaker buttons pin one</td></tr>
+  <tr><td>Background music</td><td>earshot <code>bed/warm</code> (electric piano, F3), rendered locally</td><td>62.6 s seamless loop at −20 LUFS; ogg + m4a (Safari); plays at 16 % volume, ducks to 2.5 % while a video has sound; starts at once if allowed, otherwise on the first click/tap/key</td></tr>
+  <tr><td>Thumbnails, deck images</td><td>Santanu's Canva deck</td><td>Cropped and scaled to 960px with ffmpeg</td></tr>
+  <tr><td>Program logos</td><td>Canva deck + official X avatars</td><td>Used as-is (150–400px); trademarks of their owners</td></tr>
+  <tr><td>Pixel Abyss art</td><td>@Vibecode_game winners post</td><td>Tile cropped from the 2048×1536 graphic</td></tr>
+</table>
+
+<h2>10. Interactions</h2>
+<table>
+  <tr><th>Where</th><th>What happens</th></tr>
+  <tr><td>3D objects</td><td>Hover: tooltip + hand cursor; click: spin. Cube tiles show a win from the list.</td></tr>
+  <tr><td>Link blobs</td><td>Hover: "Open X ↗"; click opens Telegram / X / YouTube / Calendly / Kick in a new tab</td></tr>
+  <tr><td>Nav</td><td>Smooth-scrolls to sections; the current section is highlighted; HUD shows 01/07 + progress bar</td></tr>
+  <tr><td>Buttons</td><td>Lime fill slides up on hover; glass highlight follows the pointer; press shrinks to 97 %</td></tr>
+  <tr><td>Cards</td><td>Achievements slide right 12px; programs lift and tilt −1°; steps straighten and rise 8px</td></tr>
+</table>
+
+<h2>11. Editing content: data.js</h2>
+<p>All words, numbers and links live in <code>data.js</code>. Change them and refresh; nothing else needs editing.</p>
+<pre><span class="k">export const</span> DATA = {
+  firstName: 'Santanu', lastName: 'Saha', brand: 'VolcanicQT', handle: '@VolcanicQT',
+  roles: ['Content Creator', 'Lead Game Tester', 'Social Media Manager', 'Growth Strategist', 'Campaign Content Reviewer'],
+  stats: [{ value: 28000, suffix: '+', label: 'Posts on X' }, ...],
+  achievements: [{ big: '#5', title: 'VibeBlitz game jam: Pixel Abyss', org: '...', tag: 'Winner' }, ...],
+  programs: [{ name: 'Immutable', role: 'Creator Program', logo: 'assets/logos/immutable.png', url: '...' }, ...],
+  videos: [{ src: 'assets/videos/thrones.mp4', ratio: 'v', title: '...', url: 'https://x.com/...' }, ...],
+  calendly, telegram, email, socials, cta, process, trusted, blobLinks, music, cubeLabels, tips ...
+};</pre>
+<p><b>Add a showcase video:</b> download it (<code>yt-dlp</code>), encode with the ffmpeg settings above into <code>assets/videos/</code>, then add an entry to <code>videos</code>.</p>
+
+<h2>12. Run, deploy, credits</h2>
+<pre><span class="c"># preview locally</span>
+node serve.mjs                         <span class="c"># → http://localhost:5173</span>
+<span class="c"># deploy to the live site (Vercel, free Hobby plan)</span>
+npx.cmd vercel deploy --prod --yes     <span class="c"># → https://volcanicqt.vercel.app</span></pre>
+<p><b>Files kept out of uploads:</b> <code>.env*</code>, <code>.vercel/</code>, <code>serve.mjs</code> and <code>README.md</code> (<code>.vercelignore</code>).</p>
+<p><b>Credits:</b> Three.js and Lenis (MIT); Unbounded, Manrope, JetBrains Mono (SIL Open Font License); background music rendered with earshot (free to use, no credit needed);
+program logos and brand names belong to their owners and are shown to describe real collaborations; all videos, thumbnails and photos are Santanu Saha's own content.</p>
+<p class="mono" style="margin-top:14pt;color:var(--ink2)">Santanu Saha · VolcanicQT · volcanicglip.gg@gmail.com · x.com/VolcanicQT</p>
+</body>
+</html>
